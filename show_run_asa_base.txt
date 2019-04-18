@@ -1,0 +1,1294 @@
+: Saved
+
+: 
+: Serial Number: JAD192800TL
+: Hardware:   ASA5506, 4096 MB RAM, CPU Atom C2000 series 1250 MHz, 1 CPU (4 cores)
+: Written by enable_15 at 05:15:33.788 CST Thu Apr 18 2019
+!
+ASA Version 9.6(2)23 
+!
+hostname ASA-FP
+domain-name qnsoluciones.com
+enable password UvkfiG6CzhstouPv encrypted
+xlate per-session deny tcp any4 any4
+xlate per-session deny tcp any4 any6
+xlate per-session deny tcp any6 any4
+xlate per-session deny tcp any6 any6
+xlate per-session deny udp any4 any4 eq domain
+xlate per-session deny udp any4 any6 eq domain
+xlate per-session deny udp any6 any4 eq domain
+xlate per-session deny udp any6 any6 eq domain
+names
+ip local pool POOL_VPN_TI 172.29.49.10-172.29.49.20 mask 255.255.255.0
+ip local pool POOL_VPN_LAB 172.29.49.241-172.29.49.254 mask 255.255.255.240
+ip local pool POOL_VPN_GRUPOA 172.29.49.65-172.29.49.94 mask 255.255.255.224
+ip local pool POOL_VPN_GRUPOB 172.29.49.33-172.29.49.62 mask 255.255.255.224
+ip local pool POOL_VPN_ISE_USERS 172.29.49.145-172.29.49.159 mask 255.255.255.240
+ip local pool POOL_VPN_FULL 10.2.26.1-10.2.26.31 mask 255.255.255.128
+
+!
+interface GigabitEthernet1/1
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/1.8
+ vlan 8
+ nameif INSIDE
+ security-level 90
+ ip address 172.29.8.1 255.255.255.0 
+ policy-route route-map RM_INSIDE
+!
+interface GigabitEthernet1/1.10
+ vlan 10
+ nameif OUT-ICE
+ security-level 10
+ ip address 201.195.94.158 255.255.255.248 
+!
+interface GigabitEthernet1/1.16
+ vlan 16
+ nameif DMZ
+ security-level 50
+ ip address 172.29.16.1 255.255.255.0 
+!
+interface GigabitEthernet1/1.300
+ vlan 300
+ nameif OUT_FO
+ security-level 0
+ ip address 186.15.229.4 255.255.255.248 
+!
+interface GigabitEthernet1/2
+ mac-address 70ca.9b4a.50c1
+ nameif OUT-CT
+ security-level 10
+ ip address dhcp 
+!
+interface GigabitEthernet1/3
+ nameif LAB
+ security-level 40
+ ip address 10.1.254.1 255.255.255.248 
+!
+interface GigabitEthernet1/4
+ nameif LAB_IWAN
+ security-level 40
+ ip address 10.1.254.9 255.255.255.248 
+!
+interface GigabitEthernet1/5
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/6
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/7
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet1/8
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management1/1
+ management-only
+ nameif MGT
+ security-level 90
+ ip address 172.29.80.55 255.255.255.0 
+!
+boot system disk0:/asa963-12-lfbff-k8.SPA
+ftp mode passive
+clock timezone CST -6
+dns domain-lookup INSIDE
+dns domain-lookup MGT
+dns server-group DefaultDNS
+ name-server 172.29.185.150 
+ domain-name qnsoluciones.com
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+object network 172.29.185.220
+ host 172.29.185.220
+object network 172.29.185.221
+ host 172.29.185.221
+object network 172.29.185.222
+ host 172.29.185.222
+object network 172.29.185.223
+ host 172.29.185.223
+object network 172.29.185.224
+ host 172.29.185.224
+object network CT
+ host 186.15.21.40
+object network IG_MAIL
+ host 201.195.94.156
+object network IL_MAIL
+ host 172.29.16.21
+object network 172.29.185.225
+ host 172.29.185.225
+object network 172.29.185.226
+ host 172.29.185.226
+object network 172.29.185.227
+ host 172.29.185.227
+object network 172.29.185.228
+ host 172.29.185.228
+object network 172.29.185.229
+ host 172.29.185.229
+object network 100.100.100.5
+ host 100.100.100.5
+object network 172.29.64.130
+ host 172.29.64.130
+object network 172.29.185.3
+ host 172.29.185.3
+object network 172.29.185.106
+ host 172.29.185.106
+object network 172.29.185.4
+ host 172.29.185.4
+object network 172.29.185.89
+ host 172.29.185.89
+object network IG_TEMP
+ host 186.15.229.3
+object network IL_EXPE
+ host 10.10.1.75
+object network 172.29.66.11
+ host 172.29.66.11
+object network IL_PABLO_CODE_80
+ host 172.29.185.108
+object network IL_PABLO_CODE_3389
+ host 172.29.185.108
+object network IL_COLLECTOR
+ host 172.29.185.80
+object network DMZ_GUESTS
+ range 172.29.16.100 172.29.16.150
+object network 172.29.185.110
+ host 172.29.185.110
+object network 172.29.185.101
+ host 172.29.185.101
+object network 172.29.186.101
+ host 172.29.186.101
+object network 172.29.186.104
+ host 172.29.186.104
+object network 172.29.186.107
+ host 172.29.186.107
+object network 172.29.186.110
+ host 172.29.186.110
+object network 172.29.186.113
+ host 172.29.186.113
+object network 172.29.186.121
+ host 172.29.186.121
+object network 172.29.186.124
+ host 172.29.186.124
+object network 172.29.186.127
+ host 172.29.186.127
+object network 172.29.186.130
+ host 172.29.186.130
+object network 172.29.186.133
+ host 172.29.186.133
+object network 172.29.186.11
+ host 172.29.186.11
+object network 172.29.186.12
+ host 172.29.186.12
+object network 172.29.186.13
+ host 172.29.186.13
+object network 172.29.186.14
+ host 172.29.186.14
+object network IL_LABS_CONSOLE
+object network IG_PUB_GUACA
+ host 186.15.229.6
+object network IL_PUB_GUACA
+ host 172.29.186.24
+object network IL_PUB_NETFLOW_9996
+ host 172.29.185.185
+object network IL_PUB_NETFLOW_80
+ host 172.29.185.185
+object network IL_PUB_PROYECT_TCP_8080
+ host 172.29.185.21
+object network IG_PUB_PROYECT_TCP_8080
+ host 186.15.229.6
+object network IL_PUB_PROYECT_TCP_3000
+ host 172.29.185.21
+object network IG_PUB_PROYECT_TCP_3000
+ host 186.15.229.6
+object network NET_INCOPESCA
+ subnet 192.168.100.0 255.255.255.0
+object network IWAN_R11
+ host 172.29.80.111
+object network IWAN_R12
+ host 172.29.80.112
+object network IWAN_R17
+ host 172.29.80.117
+object network IWAN_R18
+ host 172.29.80.118
+object network IWAN_R21
+ host 172.29.80.121
+object network IWAN_R22
+ host 172.29.80.122
+object network IWAN_R27
+ host 172.29.80.127
+object network IWAN_R31
+ host 172.29.80.131
+object network IWAN_R32
+ host 172.29.80.132
+object network IWAN_R41
+ host 172.29.80.141
+object network IWAN_R51
+ host 172.29.80.151
+object network IWAN_R52
+ host 172.29.80.152
+object network IWAN_R61
+ host 172.29.80.161
+object network IL_TEMP_MX64
+ host 172.29.16.10
+object network IL_TEMP_MX64_CM
+ host 172.29.16.10
+object network IL_PBX-800-5060
+ host 172.29.185.118
+object network IG_PBX-800-5060
+ host 186.15.229.6
+object network SSFIPS_PULPO
+ host 172.29.80.254
+object network SSFIPS_CON01
+ host 172.29.80.254
+object network SSFIPS_CON02
+ host 172.29.80.254
+object network SSFIPS_CON03
+ host 172.29.80.254
+object network SSFIPS_CON04
+ host 172.29.80.254
+object network VPN_RASPBERRYS
+ host 172.29.185.110
+object network IL_PUB_SAINT_1414
+ host 172.29.185.63
+object network OBJ_YOUTUBE
+ fqdn youtube.com
+object network IL_ISE2_3
+ host 172.29.80.15
+object network IL_DEBIAN_SERVER
+ host 172.29.185.133
+object network IL_PUB_GUACAMOLE
+ host 172.29.186.24
+object network IL_VPN_RASPBERRYS
+ host 172.29.185.110
+object network IL_172.29.186.26
+ host 172.29.186.26
+object network IL_172.29.186.27
+ host 172.29.186.27
+object network IL_172.29.186.28
+ host 172.29.186.28
+object network IL_172.29.186.29
+ host 172.29.186.29
+object network IL_172.29.186.33
+ host 172.29.186.33
+object network IL_NVR_CAMARAS
+ host 172.29.164.186
+object network IL_QNOC
+ subnet 172.29.169.0 255.255.255.0
+object network IL_CONTROLADOR_CAM_EVENTO_www
+ host 172.29.185.103
+object network IL_CONTROLADOR_CAM_EVENTO_34567
+ host 172.29.185.103
+object network IL_Servidor_Alfresco_8080
+ host 172.29.186.240
+object network UCSD_443
+ host 172.29.186.151
+object network UCSD_80
+ host 172.29.186.151
+object network IG_PUBLICACIONES
+ host 186.15.229.5
+object network IL_BACUMA_443
+ host 172.29.186.111
+object network IL_BACUMA_22
+ host 172.29.186.111
+object network UCSD_443_UD
+object network IL_UNIFI_WLC
+ host 172.29.185.133
+object network IL_UNIFI_WLC_8080
+ host 172.29.185.133
+object network IL_PRUEBA_GS1
+ host 172.29.164.210
+object network NET_GS1
+ subnet 172.29.10.0 255.255.255.0
+object network IL_UNIFI_WLC_UDP_3478
+ host 172.29.185.133
+object-group network INSIDE_NET
+ network-object 172.29.8.0 255.255.255.0
+ network-object 172.29.0.0 255.255.0.0
+ network-object 10.0.0.0 255.0.0.0
+ network-object 142.0.0.0 255.0.0.0
+ network-object 172.27.0.0 255.255.0.0
+ network-object host 100.100.100.5
+ network-object host 100.100.100.4
+ network-object 61.202.163.0 255.255.255.0
+ network-object 213.161.81.0 255.255.255.0
+ network-object 94.75.237.0 255.255.255.0
+ network-object 190.220.56.0 255.255.255.0
+ network-object 172.16.0.0 255.255.255.0
+ network-object 196.40.20.0 255.255.255.0
+ network-object 192.168.11.0 255.255.255.0
+ network-object 192.168.12.0 255.255.255.0
+ network-object 192.168.13.0 255.255.255.0
+ network-object 192.168.14.0 255.255.255.0
+ network-object 192.168.15.0 255.255.255.0
+ network-object 192.168.25.0 255.255.255.0
+ network-object 192.168.21.0 255.255.255.0
+ network-object 192.168.35.0 255.255.255.0
+ network-object 192.168.45.0 255.255.255.0
+ network-object 192.168.71.0 255.255.255.0
+ network-object 186.15.121.8 255.255.255.248
+ network-object 186.15.132.8 255.255.255.248
+ network-object 186.15.221.8 255.255.255.248
+ network-object 192.168.4.0 255.255.255.0
+ network-object 192.168.5.0 255.255.255.0
+ network-object 192.168.6.0 255.255.255.0
+ network-object 100.64.0.0 255.255.0.0
+ network-object 192.168.39.0 255.255.255.0
+ network-object 10.10.10.0 255.255.255.0
+ network-object 10.254.100.0 255.255.255.0
+ network-object 172.20.0.0 255.255.0.0
+ network-object 172.21.0.0 255.255.0.0
+object-group network CT_PAT
+object-group network IL_VPN_RA
+ network-object 172.29.49.0 255.255.255.0
+ network-object 10.2.26.0 255.255.255.128
+object-group network OL_EZVPN
+ network-object host 10.10.50.1
+ network-object host 10.10.50.2
+object-group network INTERNET_FULL
+ network-object host 172.29.80.50
+ network-object host 172.29.185.106
+ network-object host 172.29.64.111
+ network-object 172.29.64.0 255.255.255.0
+ network-object host 172.29.185.102
+ network-object host 192.168.0.240
+ network-object host 192.168.0.241
+ network-object 100.64.0.0 255.255.0.0
+object-group network DMZ_NET
+ network-object 172.29.16.0 255.255.255.0
+object-group network NET_CIT
+ network-object 10.0.0.0 255.128.0.0
+object-group network INSIDE_64
+ network-object 172.29.64.0 255.255.255.0
+object-group network IL_VPN_INCOP
+ network-object 172.20.0.0 255.255.0.0
+ network-object 192.168.0.0 255.255.0.0
+object-group network VPN_NET_QNS_INC
+ network-object 172.29.80.0 255.255.255.0
+ network-object 172.29.64.0 255.255.255.0
+ network-object 172.29.185.0 255.255.255.0
+ network-object 172.29.164.0 255.255.255.0
+object-group network VPN_NET_INC_QNS
+ network-object 192.168.0.0 255.255.255.0
+ network-object 172.24.0.0 255.255.255.0
+ network-object 172.25.0.0 255.255.255.0
+ network-object 172.26.0.0 255.255.255.0
+ network-object 172.20.0.0 255.255.0.0
+ network-object 172.28.0.0 255.255.255.0
+object-group network NET_LAB_IPS
+ network-object 10.1.10.0 255.255.255.0
+ network-object 10.2.10.0 255.255.255.0
+object-group network INTERNET_FIBRA
+ network-object host 172.29.186.240
+ network-object host 172.29.185.133
+ network-object 10.1.200.0 255.255.255.0
+ network-object host 172.29.64.64
+ network-object object IL_QNOC
+ network-object host 172.29.186.151
+ network-object host 172.29.189.11
+ network-object host 172.29.186.111
+ network-object host 172.29.186.18
+object-group network LAB
+ network-object 10.1.0.0 255.255.0.0
+ network-object 10.3.0.0 255.255.240.0
+ network-object 10.4.0.0 255.255.240.0
+ network-object 10.5.0.0 255.255.240.0
+ network-object 10.6.0.0 255.255.240.0
+object-group network LAB_IWAN
+ network-object 100.64.11.0 255.255.255.248
+ network-object 100.64.21.0 255.255.255.248
+ network-object 100.64.32.0 255.255.255.248
+ network-object 100.64.52.0 255.255.255.248
+ network-object 100.65.11.8 255.255.255.248
+ network-object 100.65.22.8 255.255.255.248
+ network-object 100.65.32.8 255.255.255.248
+ network-object 100.65.52.8 255.255.255.248
+ network-object 100.65.51.0 255.255.255.248
+ network-object 100.65.12.0 255.255.255.248
+ network-object 100.66.12.0 255.255.255.248
+ network-object 100.65.61.0 255.255.255.248
+ network-object 100.65.32.0 255.255.255.248
+ network-object 100.65.42.0 255.255.255.248
+ network-object 100.66.61.0 255.255.255.248
+object-group network NET_ASAV
+ network-object 10.84.167.0 255.255.255.192
+object-group network NET_QNS_ASAV
+ network-object 172.29.64.0 255.255.255.0
+object-group network NET_VPN_C_RENE
+ network-object 172.18.18.0 255.255.255.0
+object-group network NET_QNS_HQ
+ network-object 172.29.185.0 255.255.255.0
+ network-object 172.29.64.0 255.255.255.0
+ network-object 172.29.164.0 255.255.255.0
+ network-object 172.29.80.0 255.255.255.0
+ network-object 172.29.169.0 255.255.255.0
+ network-object 172.29.186.0 255.255.255.0
+ network-object 172.29.200.0 255.255.255.0
+object-group network NET_QNS_VDC
+ network-object 10.1.0.0 255.255.255.0
+ network-object 10.200.0.0 255.255.255.0
+object-group network OG_NO_SFR
+object-group network NET_HQ_CASA_ROLAND
+ network-object host 172.29.185.133
+object-group network NET_CASA_ROLAND_HQ
+ network-object 172.16.7.0 255.255.255.0
+ network-object 172.16.4.0 255.255.255.0
+access-list ACL_SPLIT_VPN_TI extended permit ip 172.29.0.0 255.255.0.0 any 
+access-list ACL_SPLIT_VPN_TI extended permit ip 172.30.0.0 255.255.0.0 any 
+access-list ACL_SFR extended deny ip any any 
+access-list OUT extended permit tcp any object IL_BACUMA_22 eq ssh 
+access-list OUT extended permit udp any object IL_VPN_RASPBERRYS eq 1194 log 
+access-list OUT extended permit icmp any any unreachable 
+access-list OUT extended permit icmp any any time-exceeded 
+access-list OUT extended permit tcp any host 172.29.64.130 eq rtsp 
+access-list OUT extended permit tcp any host 172.29.64.130 eq 8000 
+access-list OUT extended permit tcp any host 172.29.64.130 eq www 
+access-list OUT extended permit tcp any host 172.29.185.220 eq 3389 
+access-list OUT extended permit tcp any host 172.29.185.221 eq 3389 
+access-list OUT extended permit tcp any host 172.29.185.222 eq 3389 
+access-list OUT extended permit tcp any host 172.29.185.223 eq 3389 
+access-list OUT extended permit tcp any host 172.29.185.224 eq 3389 
+access-list OUT extended permit tcp any host 172.29.66.11 eq www 
+access-list OUT extended permit tcp any host 172.29.185.225 eq 3389 
+access-list OUT extended permit tcp any object IL_COLLECTOR eq https 
+access-list OUT extended permit tcp any object IL_COLLECTOR eq www 
+access-list OUT extended permit ip 192.168.254.0 255.255.255.0 any log 
+access-list OUT extended permit tcp any object IL_PUB_GUACA 
+access-list OUT extended permit tcp any object IL_UNIFI_WLC eq 8443 
+access-list OUT extended permit tcp any object IL_UNIFI_WLC_8080 eq 8080 
+access-list OUT extended permit tcp any object IL_UNIFI_WLC_UDP_3478 eq 3478 
+access-list ACL_SPLIT_VPN_LAB extended permit ip 172.29.185.0 255.255.255.0 any 
+access-list ACL_SPLIT_VPN_LAB extended permit ip 172.29.0.0 255.255.0.0 any 
+access-list ACL_SPLIT_VPN_LAB extended permit ip 10.0.0.0 255.0.0.0 any 
+access-list ACL_PBR_DMZ extended deny ip host 172.29.16.21 10.0.0.0 255.0.0.0 
+access-list ACL_PBR_DMZ extended deny ip host 172.29.16.21 172.16.0.0 255.240.0.0 
+access-list ACL_PBR_DMZ extended deny ip host 172.29.16.21 192.168.0.0 255.255.0.0 
+access-list ACL_PBR_DMZ extended permit ip host 172.29.16.21 any 
+access-list OUT-ICE extended permit icmp any any unreachable 
+access-list OUT-ICE extended permit icmp any any time-exceeded 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq smtp 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq 465 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq 995 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq www 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq 993 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq https 
+access-list OUT-ICE extended permit tcp any object IL_MAIL eq domain 
+access-list OUT-ICE extended permit udp any object IL_MAIL eq domain 
+access-list OUT-ICE extended permit tcp any host 172.29.185.225 eq 3389 
+access-list OUT-ICE extended permit tcp any host 172.29.185.226 eq 3389 
+access-list OUT-ICE extended permit tcp any host 172.29.185.227 eq 3389 
+access-list OUT-ICE extended permit tcp any host 172.29.185.228 eq 3389 
+access-list OUT-ICE extended permit tcp any host 172.29.185.229 eq 3389 
+access-list ACL_DMZ extended permit udp host 172.29.16.21 host 172.29.185.150 eq domain 
+access-list ACL_DMZ extended permit tcp host 172.29.16.21 host 172.29.185.150 eq domain 
+access-list ACL_DMZ extended deny ip host 172.29.16.21 10.0.0.0 255.0.0.0 
+access-list ACL_DMZ extended deny ip host 172.29.16.21 172.16.0.0 255.240.0.0 
+access-list ACL_DMZ extended deny ip host 172.29.16.21 192.168.0.0 255.255.0.0 
+access-list ACL_DMZ extended permit ip host 172.29.16.21 any 
+access-list ACL_DMZ extended permit ip host 172.29.16.51 any 
+access-list ACL_DMZ extended permit ip host 172.29.16.10 host 192.168.15.2 
+access-list ACL_DMZ extended permit ip object DMZ_GUESTS any 
+access-list ACL_DMZ extended permit ip host 172.29.16.10 any 
+access-list ACL_PBR_INSIDE extended deny ip object-group INTERNET_FULL 172.16.0.0 255.240.0.0 
+access-list ACL_PBR_INSIDE extended deny ip object-group INTERNET_FULL 192.168.0.0 255.255.0.0 
+access-list ACL_PBR_INSIDE extended deny ip object-group INTERNET_FULL 10.0.0.0 255.0.0.0 
+access-list ACL_PBR_INSIDE extended deny ip object-group INTERNET_FULL 186.15.229.0 255.255.255.248 
+access-list ACL_PBR_INSIDE extended permit ip object-group INTERNET_FULL any 
+access-list OUT2 extended permit tcp any gt 1024 object IL_EXPE eq 2776 
+access-list OUT2 extended permit udp any gt 1024 object IL_EXPE range 36000 36001 
+access-list ACL_VPN_CIT extended permit ip 172.29.0.0 255.255.0.0 10.0.0.0 255.128.0.0 
+access-list OUT3 extended permit udp any gt 1024 object IL_EXPE range sip 5061 
+access-list OUT3 extended permit tcp any gt 1024 object IL_EXPE eq sip 
+access-list OUT3 extended permit tcp any gt 1024 object IL_EXPE eq 2776 
+access-list OUT3 extended permit tcp any gt 1024 object IL_EXPE eq h323 
+access-list OUT3 extended permit udp any gt 1024 object IL_EXPE range 36000 59999 
+access-list OUT3 extended permit udp any gt 1024 object IL_EXPE range 3478 3483 
+access-list OUT3 extended permit udp any gt 1024 object IL_EXPE range 24000 29999 
+access-list ACL_OUT_FO extended permit tcp any object IL_BACUMA_443 eq https 
+access-list ACL_OUT_FO extended permit tcp any object IL_BACUMA_22 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object UCSD_443 eq https log 
+access-list ACL_OUT_FO extended permit tcp any object IL_Servidor_Alfresco_8080 eq 8080 
+access-list ACL_OUT_FO extended permit tcp any object IL_NVR_CAMARAS eq www 
+access-list ACL_OUT_FO extended permit tcp any object IL_172.29.186.33 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IL_172.29.186.29 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IL_172.29.186.28 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IL_172.29.186.27 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IL_172.29.186.26 eq ssh 
+access-list ACL_OUT_FO extended permit udp any object IL_VPN_RASPBERRYS eq 1194 log 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_GUACAMOLE eq 8443 
+access-list ACL_OUT_FO extended permit tcp any object SSFIPS_CON01 eq 2001 
+access-list ACL_OUT_FO extended permit tcp any object SSFIPS_CON02 eq 2002 
+access-list ACL_OUT_FO extended permit tcp any object SSFIPS_CON03 eq 2003 
+access-list ACL_OUT_FO extended permit tcp any object SSFIPS_CON04 eq 2004 
+access-list ACL_OUT_FO extended permit tcp any object SSFIPS_PULPO eq telnet 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_GUACA eq 8443 
+access-list ACL_OUT_FO extended permit udp any object IL_PUB_NETFLOW_9996 eq 9996 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_NETFLOW_80 eq www 
+access-list ACL_OUT_FO extended permit tcp any host 172.29.66.11 eq www 
+access-list ACL_OUT_FO extended permit tcp any object IL_PABLO_CODE_80 eq www 
+access-list ACL_OUT_FO extended permit tcp any object IL_PABLO_CODE_3389 eq 3389 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.185.101 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.101 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.104 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.107 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.110 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.113 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.121 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.124 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.127 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.130 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.133 eq www 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.11 eq 3389 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.12 eq 3389 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.13 eq 3389 
+access-list ACL_OUT_FO extended permit tcp any object 172.29.186.14 eq 3389 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_PROYECT_TCP_8080 eq 8080 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_PROYECT_TCP_3000 eq 3000 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R11 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R12 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R17 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R18 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R21 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R22 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R27 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R31 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R32 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R41 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R51 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R52 eq ssh 
+access-list ACL_OUT_FO extended permit tcp any object IWAN_R61 eq ssh 
+access-list ACL_OUT_FO extended permit udp host 186.177.84.11 object IL_PBX-800-5060 eq sip 
+access-list ACL_OUT_FO extended permit udp any object IL_PBX-800-5060 eq sip 
+access-list ACL_OUT_FO extended permit tcp any object IL_PUB_SAINT_1414 eq 1414 
+access-list ACL_OUT_FO extended permit tcp any object IL_CONTROLADOR_CAM_EVENTO_www eq www 
+access-list ACL_OUT_FO extended permit tcp any object IL_CONTROLADOR_CAM_EVENTO_34567 eq 34567 
+access-list ACL_OUT_FO extended permit udp any object UCSD_80 eq www log 
+access-list ACL_VPN_INCOP extended permit ip object-group VPN_NET_QNS_INC object-group VPN_NET_INC_QNS 
+access-list flow_export_acl extended permit ip any any 
+access-list ACL_PBR_FIBRA extended deny ip object-group INTERNET_FIBRA 172.16.0.0 255.240.0.0 
+access-list ACL_PBR_FIBRA extended deny ip object-group INTERNET_FIBRA 192.168.0.0 255.255.0.0 
+access-list ACL_PBR_FIBRA extended deny ip object-group INTERNET_FIBRA 10.0.0.0 255.0.0.0 
+access-list ACL_PBR_FIBRA extended permit ip object-group INTERNET_FIBRA any 
+access-list ACL_VPN_INCOPESCA extended permit ip 172.29.64.0 255.255.255.0 192.168.0.0 255.255.255.0 
+access-list ACL_VPN_ENTEL_ASAV extended permit ip 172.29.64.0 255.255.255.0 10.84.167.0 255.255.255.192 
+access-list ACL_SPLIT_ISE_VPN extended permit ip 172.29.0.0 255.255.0.0 any 
+access-list ACL_REDIRECT extended deny udp any any eq domain 
+access-list ACL_REDIRECT extended deny ip any host 172.29.80.14 
+access-list ACL_REDIRECT extended deny icmp any any 
+access-list ACL_REDIRECT extended permit tcp any any eq www 
+access-list ACL_VPN_CASA_RENE extended permit ip 172.29.64.0 255.255.255.0 172.18.18.0 255.255.255.0 log 
+access-list ACL_VPN_QNS_VDC extended permit ip object-group NET_QNS_HQ object-group NET_QNS_VDC 
+access-list ACL_VPN_HQ_CASA_ROLAND extended permit ip object-group NET_HQ_CASA_ROLAND object-group NET_HQ_CASA_ROLAND 
+access-list ACL_VPN_HQ_CASA_ROLAND extended permit ip object-group NET_HQ_CASA_ROLAND object-group NET_CASA_ROLAND_HQ 
+access-list ACL_VPN_GS1 extended permit ip 172.29.10.0 255.255.255.0 host 172.29.164.210 
+access-list ACL_VPN_GS1 extended permit ip host 172.29.164.210 172.29.10.0 255.255.255.0 
+pager lines 24
+logging enable
+logging buffer-size 1000000
+logging console debugging
+logging buffered debugging
+logging asdm informational
+mtu INSIDE 1500
+mtu OUT-ICE 1500
+mtu DMZ 1500
+mtu OUT_FO 1500
+mtu OUT-CT 1500
+mtu LAB 1500
+mtu LAB_IWAN 1500
+mtu MGT 1500
+icmp unreachable rate-limit 1 burst-size 1
+icmp permit any INSIDE
+asdm image disk0:/asdm-7121.bin
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+arp rate-limit 16384
+nat (INSIDE,OUT_FO) source static NET_HQ_CASA_ROLAND NET_HQ_CASA_ROLAND destination static NET_CASA_ROLAND_HQ NET_CASA_ROLAND_HQ route-lookup
+nat (INSIDE,OUT_FO) source static NET_QNS_HQ NET_QNS_HQ destination static NET_QNS_VDC NET_QNS_VDC route-lookup
+nat (INSIDE,OUT_FO) source static NET_QNS_ASAV NET_QNS_ASAV destination static NET_ASAV NET_ASAV
+nat (OUT_FO,INSIDE) source static OL_EZVPN OL_EZVPN destination static INSIDE_64 INSIDE_64 no-proxy-arp
+nat (INSIDE,OUT_FO) source static INSIDE_64 INSIDE_64 destination static OL_EZVPN OL_EZVPN no-proxy-arp
+nat (INSIDE,OUT_FO) source static INSIDE_NET INSIDE_NET destination static OL_EZVPN OL_EZVPN
+nat (INSIDE,OUT-ICE) source static INSIDE_NET INSIDE_NET destination static OL_EZVPN OL_EZVPN
+nat (INSIDE,OUT-ICE) source static INSIDE_NET INSIDE_NET destination static NET_VPN_C_RENE NET_VPN_C_RENE
+nat (INSIDE,OUT_FO) source static INSIDE_NET INSIDE_NET destination static IL_VPN_RA IL_VPN_RA route-lookup
+nat (INSIDE,OUT-CT) source static INSIDE_NET INSIDE_NET destination static IL_VPN_RA IL_VPN_RA route-lookup
+nat (INSIDE,OUT-CT) source static IL_PRUEBA_GS1 IL_PRUEBA_GS1 destination static NET_GS1 NET_GS1 route-lookup
+!
+object network VPN_RASPBERRYS
+ nat (INSIDE,OUT-CT) static interface service udp 1194 1194 
+object network IL_PUB_SAINT_1414
+ nat (INSIDE,OUT_FO) static interface service tcp 1414 1414 
+object network IL_PUB_GUACAMOLE
+ nat (INSIDE,OUT_FO) static interface service tcp 8443 8443 
+object network IL_VPN_RASPBERRYS
+ nat (INSIDE,OUT_FO) static interface service udp 1194 1194 
+object network IL_172.29.186.26
+ nat (INSIDE,OUT_FO) static interface service tcp ssh 2222 
+object network IL_172.29.186.27
+ nat (INSIDE,OUT_FO) static interface service tcp ssh 2223 
+object network IL_172.29.186.28
+ nat (INSIDE,OUT_FO) static interface service tcp ssh 2224 
+object network IL_172.29.186.29
+ nat (INSIDE,OUT_FO) static interface service tcp ssh 2225 
+object network IL_172.29.186.33
+ nat (INSIDE,OUT_FO) static interface service tcp ssh 2226 
+object network IL_NVR_CAMARAS
+ nat (INSIDE,OUT_FO) static interface service tcp www 8085 
+object network IL_CONTROLADOR_CAM_EVENTO_www
+ nat (INSIDE,OUT_FO) static interface service tcp www www 
+object network IL_CONTROLADOR_CAM_EVENTO_34567
+ nat (INSIDE,OUT_FO) static interface service tcp 34567 34567 
+object network IL_Servidor_Alfresco_8080
+ nat (INSIDE,OUT_FO) static interface service tcp 8080 8080 
+object network UCSD_443
+ nat (INSIDE,OUT_FO) static IG_PUBLICACIONES service tcp https 4443 
+object network UCSD_80
+ nat (INSIDE,OUT_FO) static IG_PUBLICACIONES service tcp www 8088 
+object network IL_BACUMA_443
+ nat (INSIDE,OUT_FO) static IG_PUBLICACIONES service tcp https 8443 
+object network IL_BACUMA_22
+ nat (INSIDE,OUT_FO) static IG_PUBLICACIONES service tcp ssh 2222 
+object network IL_UNIFI_WLC
+ nat (INSIDE,OUT-CT) static interface service tcp 8443 8443 
+object network IL_UNIFI_WLC_8080
+ nat (INSIDE,OUT-CT) static interface service tcp 8080 8080 
+object network IL_UNIFI_WLC_UDP_3478
+ nat (INSIDE,OUT-CT) static interface service udp 3478 3478 
+!
+nat (INSIDE,OUT_FO) after-auto source dynamic INSIDE_NET interface
+nat (INSIDE,DMZ) after-auto source static INSIDE_NET INSIDE_NET destination static DMZ_NET DMZ_NET no-proxy-arp
+nat (OUT-CT,OUT-CT) after-auto source dynamic IL_VPN_RA interface
+nat (OUT-ICE,OUT-ICE) after-auto source dynamic IL_VPN_RA interface
+nat (OUT-CT,OUT-ICE) after-auto source dynamic IL_VPN_RA interface
+nat (OUT-ICE,OUT-CT) after-auto source dynamic IL_VPN_RA interface
+nat (OUT-CT,OUT_FO) after-auto source dynamic IL_VPN_RA interface
+nat (OUT_FO,OUT_FO) after-auto source dynamic IL_VPN_RA interface
+nat (DMZ,OUT_FO) after-auto source dynamic DMZ_NET interface
+nat (INSIDE,OUT-CT) after-auto source dynamic INSIDE_NET interface
+nat (OUT_FO,OUT-CT) after-auto source dynamic IL_VPN_RA interface
+nat (DMZ,OUT-CT) after-auto source dynamic DMZ_NET interface
+nat (INSIDE,OUT-ICE) after-auto source dynamic INSIDE_NET interface
+nat (LAB,OUT-CT) after-auto source dynamic LAB interface
+nat (LAB,OUT_FO) after-auto source dynamic LAB interface
+nat (LAB_IWAN,OUT-CT) after-auto source dynamic LAB_IWAN interface
+nat (LAB_IWAN,OUT_FO) after-auto source dynamic LAB_IWAN interface
+access-group OUT-ICE in interface OUT-ICE
+access-group ACL_DMZ in interface DMZ
+access-group ACL_OUT_FO in interface OUT_FO
+access-group OUT in interface OUT-CT
+!
+route-map RM_DMZ permit 10
+ match ip address ACL_PBR_DMZ
+ set ip next-hop 201.195.94.153
+
+!
+route-map RM_INSIDE permit 10
+ match ip address ACL_PBR_FIBRA
+ set ip next-hop 186.15.229.1
+
+!
+route OUT-CT 0.0.0.0 0.0.0.0 186.15.21.1 15 track 1
+route OUT_FO 0.0.0.0 0.0.0.0 186.15.229.1 25
+route OUT-ICE 0.0.0.0 0.0.0.0 201.195.94.153 55
+route INSIDE 10.0.0.0 255.0.0.0 172.29.8.2 1
+route INSIDE 10.1.0.0 255.255.0.0 172.29.8.2 1
+route OUT_FO 10.1.0.0 255.255.255.0 186.15.229.1 1
+route INSIDE 10.1.11.0 255.255.255.0 172.29.8.2 1
+route INSIDE 10.1.21.0 255.255.255.0 172.29.8.2 1
+route INSIDE 10.1.31.0 255.255.255.0 172.29.8.2 1
+route INSIDE 10.1.41.0 255.255.255.0 172.29.8.2 1
+route INSIDE 10.1.200.0 255.255.255.0 172.29.8.2 1
+route LAB 10.3.0.0 255.255.240.0 10.1.254.2 1
+route LAB 10.4.0.0 255.255.240.0 10.1.254.2 1
+route LAB 10.5.0.0 255.255.240.0 10.1.254.2 1
+route LAB 10.6.0.0 255.255.240.0 10.1.254.2 1
+route INSIDE 10.10.0.0 255.255.0.0 172.29.8.2 1
+route INSIDE 10.10.10.0 255.255.255.0 172.29.8.2 1
+route OUT_FO 10.10.50.1 255.255.255.255 186.15.229.1 1
+route INSIDE 10.20.0.0 255.255.0.0 172.29.8.2 1
+route INSIDE 10.90.0.0 255.255.0.0 172.29.8.2 1
+route INSIDE 10.99.99.0 255.255.255.0 172.29.8.2 1
+route OUT_FO 10.105.1.11 255.255.255.255 186.15.229.1 1
+route OUT_FO 10.105.1.12 255.255.255.255 186.15.229.1 1
+route OUT_FO 10.200.0.0 255.255.255.0 186.15.229.1 1
+route INSIDE 61.202.163.0 255.255.255.0 172.29.8.2 1
+route INSIDE 94.75.237.0 255.255.255.0 172.29.8.2 1
+route INSIDE 100.64.0.0 255.255.0.0 172.29.8.2 1
+route LAB_IWAN 100.64.11.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.64.21.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.64.32.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.64.52.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.11.8 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.12.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.22.8 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.32.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.32.8 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.42.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.51.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.52.8 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.65.61.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.66.12.0 255.255.255.248 10.1.254.10 1
+route LAB_IWAN 100.66.61.0 255.255.255.248 10.1.254.10 1
+route INSIDE 100.100.100.4 255.255.255.255 172.29.8.2 1
+route INSIDE 100.100.100.5 255.255.255.255 172.29.8.2 1
+route INSIDE 142.0.0.0 255.0.0.0 172.29.8.2 1
+route INSIDE 157.26.1.0 255.255.255.0 172.29.8.2 1
+route OUT_FO 164.77.92.204 255.255.255.255 186.15.229.1 1
+route OUT_FO 170.246.100.174 255.255.255.255 186.15.229.1 1
+route INSIDE 172.16.0.0 255.255.0.0 172.29.8.2 1
+route INSIDE 172.16.0.0 255.255.255.0 172.29.8.2 1
+route OUT_FO 172.16.4.0 255.255.255.0 186.15.229.1 1
+route OUT_FO 172.16.7.0 255.255.255.0 186.15.229.1 1
+route OUT-ICE 172.18.18.0 255.255.255.0 201.195.94.153 1
+route INSIDE 172.20.0.0 255.255.0.0 172.29.8.2 1
+route INSIDE 172.21.0.0 255.255.0.0 172.29.8.2 1
+route OUT-ICE 172.24.0.0 255.255.255.0 201.195.94.153 1
+route OUT-ICE 172.25.0.0 255.255.255.0 201.195.94.153 1
+route OUT-ICE 172.26.0.0 255.255.255.0 201.195.94.153 1
+route INSIDE 172.27.0.0 255.255.0.0 172.29.8.2 1
+route OUT-ICE 172.28.0.0 255.255.255.0 201.195.94.153 1
+route INSIDE 172.29.0.0 255.255.0.0 172.29.8.2 1
+route OUT-CT 172.29.10.0 255.255.255.0 186.15.21.1 15
+route OUT_FO 172.29.49.100 255.255.255.255 186.15.229.1 1
+route INSIDE 172.29.185.0 255.255.255.0 172.29.8.2 1
+route MGT 172.29.185.150 255.255.255.255 172.29.80.1 1
+route INSIDE 172.30.0.0 255.255.0.0 172.29.8.2 1
+route OUT_FO 186.15.231.246 255.255.255.255 186.15.229.1 1
+route OUT_FO 186.179.73.102 255.255.255.255 186.15.229.1 1
+route INSIDE 190.220.56.0 255.255.255.0 172.29.8.2 1
+route OUT-ICE 192.168.0.0 255.255.0.0 201.195.94.153 1
+route INSIDE 192.168.4.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.5.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.6.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.11.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.12.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.13.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.14.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.15.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.21.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.25.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.35.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.39.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.45.0 255.255.255.0 172.29.8.2 1
+route INSIDE 192.168.71.0 255.255.255.0 172.29.8.2 1
+route OUT-ICE 192.168.100.0 255.255.255.0 201.195.94.153 1
+route INSIDE 196.40.20.0 255.255.255.0 172.29.8.2 1
+route INSIDE 200.186.0.0 255.255.0.0 172.29.8.2 1
+route OUT-CT 201.193.185.100 255.255.255.255 186.15.21.1 15
+route OUT-ICE 201.197.252.146 255.255.255.255 201.195.94.153 1
+route INSIDE 213.161.81.0 255.255.255.0 172.29.8.2 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+aaa-server ISE-2 protocol radius
+ authorize-only
+ interim-accounting-update periodic 1
+ dynamic-authorization
+aaa-server ISE-2 (INSIDE) host 172.29.80.15
+ key 1234QWer@$
+ authentication-port 1812
+ accounting-port 1813
+user-identity default-domain LOCAL
+aaa authentication ssh console LOCAL 
+aaa authentication http console LOCAL 
+aaa authorization exec LOCAL 
+http server enable
+http 172.29.0.0 255.255.0.0 INSIDE
+no snmp-server location
+no snmp-server contact
+snmp-server community Qu1ckn3t2k16@$
+sla monitor 1
+ type echo protocol ipIcmpEcho 186.15.21.1 interface OUT-CT
+ frequency 10
+sla monitor schedule 1 life forever start-time now
+service sw-reset-button
+crypto ipsec ikev1 transform-set ESP-3DES-MD5 esp-3des esp-md5-hmac 
+crypto ipsec ikev1 transform-set ESP-DES-MD5 esp-des esp-md5-hmac 
+crypto ipsec ikev1 transform-set ESP-3DES-SHA esp-3des esp-sha-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-128-SHA esp-aes esp-sha-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-192-SHA esp-aes-192 esp-sha-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-128-MD5 esp-aes esp-md5-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-192-MD5 esp-aes-192 esp-md5-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-256-MD5 esp-aes-256 esp-md5-hmac 
+crypto ipsec ikev1 transform-set ESP-DES-SHA esp-des esp-sha-hmac 
+crypto ipsec ikev1 transform-set ESP-AES-256-SHA esp-aes-256 esp-sha-hmac 
+crypto ipsec ikev1 transform-set TS-AES-128-SHA esp-aes esp-sha-hmac 
+crypto ipsec ikev2 ipsec-proposal AES256
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal TS_IKEV2
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1
+crypto ipsec ikev2 ipsec-proposal TSV2_AES256
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1
+crypto ipsec security-association pmtu-aging infinite
+crypto dynamic-map SYSTEM_DEFAULT_CRYPTO_MAP 65535 set ikev1 transform-set ESP-AES-128-SHA ESP-AES-128-MD5 ESP-AES-192-SHA ESP-AES-192-MD5 ESP-AES-256-SHA ESP-AES-256-MD5 ESP-3DES-SHA ESP-3DES-MD5 ESP-DES-SHA ESP-DES-MD5
+crypto dynamic-map SYSTEM_DEFAULT_CRYPTO_MAP 65535 set ikev2 ipsec-proposal AES256
+crypto dynamic-map SYSTEM_DEFAULT_CRYPTO_MAP 65535 set reverse-route
+crypto map OUT-ICE_map 20 match address ACL_VPN_INCOP
+crypto map OUT-ICE_map 20 set peer 201.197.252.150 
+crypto map OUT-ICE_map 20 set ikev1 transform-set ESP-AES-256-SHA
+crypto map OUT-ICE_map 20 set security-association lifetime seconds 3600
+crypto map OUT-ICE_map 25 match address ACL_VPN_INCOPESCA
+crypto map OUT-ICE_map 25 set peer 181.193.48.59 
+crypto map OUT-ICE_map 25 set ikev2 ipsec-proposal TS_IKEV2
+crypto map OUT-ICE_map 25 set security-association lifetime seconds 3600
+crypto map OUT-ICE_map 30 match address ACL_VPN_CASA_RENE
+crypto map OUT-ICE_map 30 set peer 186.159.130.121 
+crypto map OUT-ICE_map 30 set ikev1 transform-set ESP-DES-SHA
+crypto map OUT-ICE_map 30 set security-association lifetime seconds 3600
+crypto map OUT-ICE_map 65535 ipsec-isakmp dynamic SYSTEM_DEFAULT_CRYPTO_MAP
+crypto map OUT-ICE_map interface OUT-ICE
+crypto map CM_VPN_CT 5 match address ACL_VPN_QNS_VDC
+crypto map CM_VPN_CT 5 set peer 170.246.100.174 
+crypto map CM_VPN_CT 5 set ikev1 transform-set ESP-AES-256-SHA
+crypto map CM_VPN_CT 5 set security-association lifetime seconds 28800
+crypto map CM_VPN_CT 10 match address ACL_VPN_HQ_CASA_ROLAND
+crypto map CM_VPN_CT 10 set peer 186.179.73.102 
+crypto map CM_VPN_CT 10 set ikev1 transform-set ESP-AES-256-SHA
+crypto map CM_VPN_CT 10 set security-association lifetime seconds 28800
+crypto map CM_VPN_CT 100 match address ACL_VPN_CIT
+crypto map CM_VPN_CT 100 set ikev2 ipsec-proposal TS_IKEV2
+crypto map CM_VPN_CT 65535 ipsec-isakmp dynamic SYSTEM_DEFAULT_CRYPTO_MAP
+crypto map CM_VPN_CT interface OUT_FO
+crypto map CM_VPN_GS1 110 match address ACL_VPN_GS1
+crypto map CM_VPN_GS1 110 set peer 201.193.185.100 
+crypto map CM_VPN_GS1 110 set ikev1 transform-set ESP-3DES-SHA
+crypto map CM_VPN_GS1 110 set security-association lifetime seconds 28800
+crypto map CM_VPN_GS1 interface OUT-CT
+crypto ca trustpoint GD8
+ crl configure
+crypto ca trustpoint GD8-1
+ crl configure
+crypto ca trustpoint GD8-2
+ crl configure
+crypto ca trustpoint GD2017
+ no validation-usage
+ crl configure
+crypto ca trustpool policy
+crypto ikev2 policy 10
+ encryption 3des
+ integrity sha
+ group 2
+ prf sha
+ lifetime seconds 28800
+crypto ikev2 policy 100
+ encryption aes-256
+ integrity sha512
+ group 14
+ prf sha
+ lifetime seconds 86400
+crypto ikev2 enable OUT_FO
+crypto ikev1 enable OUT-ICE
+crypto ikev1 enable OUT_FO
+crypto ikev1 enable OUT-CT
+crypto ikev1 policy 20
+ authentication rsa-sig
+ encryption aes-256
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 25
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 2
+ lifetime 28800
+crypto ikev1 policy 30
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 50
+ authentication rsa-sig
+ encryption aes-192
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 60
+ authentication pre-share
+ encryption aes-192
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 80
+ authentication rsa-sig
+ encryption aes
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 90
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 100
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 5
+ lifetime 28800
+crypto ikev1 policy 110
+ authentication rsa-sig
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 120
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 140
+ authentication rsa-sig
+ encryption des
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 150
+ authentication pre-share
+ encryption des
+ hash sha
+ group 2
+ lifetime 86400
+!
+track 1 rtr 1 reachability
+telnet timeout 5
+ssh stricthostkeycheck
+ssh 172.29.0.0 255.255.0.0 INSIDE
+ssh 0.0.0.0 0.0.0.0 OUT-ICE
+ssh 0.0.0.0 0.0.0.0 OUT_FO
+ssh 0.0.0.0 0.0.0.0 OUT-CT
+ssh timeout 20
+ssh version 2
+ssh key-exchange group dh-group1-sha1
+console timeout 0
+
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+ssl server-version tlsv1.2
+ssl client-version tlsv1.2
+ssl cipher tlsv1.2 high
+ssl dh-group group24
+webvpn
+ enable OUT-ICE
+ enable OUT_FO
+ enable OUT-CT
+ anyconnect image disk0:/anyconnect-linux64-4.6.02074-webdeploy-k9.pkg 1
+ anyconnect image disk0:/anyconnect-macos-4.6.02074-webdeploy-k9.pkg 2
+ anyconnect image disk0:/anyconnect-win-4.6.02074-webdeploy-k9.pkg 3
+ anyconnect enable
+ tunnel-group-list enable
+ cache
+  disable
+ error-recovery disable
+group-policy VPN_QNS_TI internal
+group-policy VPN_QNS_TI attributes
+ vpn-tunnel-protocol ikev1 
+ password-storage enable
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_VPN_TI
+ nem enable
+ address-pools value POOL_VPN_TI
+group-policy GP_VPN_FULL internal
+group-policy GP_VPN_FULL attributes
+ dns-server value 8.8.8.8
+ vpn-tunnel-protocol ssl-client 
+ group-lock value TG_VPN_FULL
+ address-pools value POOL_VPN_FULL
+group-policy GP_VPN_TI internal
+group-policy GP_VPN_TI attributes
+ wins-server none
+ dns-server value 172.29.64.200
+ vpn-tunnel-protocol ikev2 ssl-client 
+ group-lock value TG_VPN_TI
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_VPN_TI
+ default-domain value qnsoluciones.com
+ address-pools value POOL_VPN_TI
+group-policy GP_ISE_VPN_USERS internal
+group-policy GP_ISE_VPN_USERS attributes
+ banner value EL ACCESO NO-AUTORIZADO MEDIANTE ESTA HERRAMIENTA ESTA PROHIBIDO
+ banner value Quicknet Solutions
+ banner value Departamento de Soporte Tecnico & Redes.
+ banner value Tecnologias de Informacion.
+ wins-server none
+ dns-server value 8.8.8.8 9.9.9.9
+ vpn-tunnel-protocol ikev2 ssl-client 
+ group-lock value TG_VPN_ISE_USERS
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_ISE_VPN
+ default-domain value qnsoluciones.com
+ address-pools value POOL_VPN_ISE_USERS
+group-policy GP_VPN_LAB internal
+group-policy GP_VPN_LAB attributes
+ wins-server none
+ dns-server value 172.29.185.150
+ vpn-tunnel-protocol ikev2 ssl-client 
+ group-lock value TG_VPN_LAB
+ split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value ACL_SPLIT_VPN_LAB
+ address-pools value POOL_VPN_LAB
+dynamic-access-policy-record DfltAccessPolicy
+username rrosa password uQgUreni7V.nQveF encrypted
+username dugalde password tTvFuOjp0Gp36EPB encrypted
+username dugalde attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username acaba-dima password cxYTUbiCu7mqZRZ1 encrypted
+username acaba-dima attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username lorozco password RvDzYUDRWBroRNLr encrypted
+username lorozco attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username ufinet password /VLMHbwUQnmN0eJn encrypted
+username ufinet attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pcordoba password NArNUHox.mjXiDxw encrypted
+username pcordoba attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username kortiz password 7Tmb0exGdRe.pt1r encrypted
+username kortiz attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username quicknet password 71lLM4jEmmlLjXhv encrypted privilege 15
+username quicknet attributes
+ service-type admin
+username Admin123 password OpQl2fr/OKLirj08 encrypted
+username rubenrosaroque password MajS5f1zETXl2fIL encrypted
+username rubenrosaroque attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username jfonseca password dMocOL33z0KPASiq encrypted
+username jfonseca attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username gzaldana password qkS8FPbcmGNqMhK/ encrypted
+username gzaldana attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username dima password Vr4DI9RsPelnYduM encrypted
+username dima attributes
+ group-lock value TG_VPN_FULL
+ service-type remote-access
+username bootcampcollab password jvG48JBY8u.PQDfE encrypted
+username bootcampcollab attributes
+ group-lock value TG_VPN_TI
+ service-type remote-access
+username qns password Ia0KD5DybcbUhDtj encrypted
+username qns attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username fire2 password VFBGQhb9wGv4Ku/8 encrypted
+username fire2 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod4 password .Pul9W8ZByFHXksG encrypted
+username pod4 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username fire3 password VFBGQhb9wGv4Ku/8 encrypted
+username fire3 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod5 password 3CsmS5HCwvPo9tqP encrypted
+username pod5 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod6 password GjmBpb2509G7iW2J encrypted
+username pod6 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username qns-l2tp password J.e2T2BD8k2498hS encrypted
+username qns-l2tp attributes
+ service-type remote-access
+username fire1 password VFBGQhb9wGv4Ku/8 encrypted
+username fire1 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod7 password H6EinZS2MOcVw7FV encrypted
+username pod7 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod10 password .p2JCAakIFlPmgll encrypted
+username pod10 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod1 password .p2JCAakIFlPmgll encrypted
+username pod1 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod11 password .p2JCAakIFlPmgll encrypted
+username pod11 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username fire4 password VFBGQhb9wGv4Ku/8 encrypted
+username fire4 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod2 password VK.PL.tyiSvKGwuy encrypted
+username pod2 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod3 password nHENOKC5172gi4wy encrypted
+username pod3 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod8 password MZ2jTvjQ10EPHK3v encrypted
+username pod8 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+username pod9 password NQ8psvpXsg1saLvg encrypted
+username pod9 attributes
+ group-lock value TG_VPN_LAB
+ service-type remote-access
+tunnel-group TG_VPN_TI type remote-access
+tunnel-group TG_VPN_TI general-attributes
+ default-group-policy GP_VPN_TI
+tunnel-group TG_VPN_TI webvpn-attributes
+ group-alias Tecnologias-Informacion enable
+tunnel-group TG_VPN_LAB type remote-access
+tunnel-group TG_VPN_LAB general-attributes
+ address-pool POOL_VPN_LAB
+ default-group-policy GP_VPN_LAB
+tunnel-group TG_VPN_LAB webvpn-attributes
+ group-alias LAB enable
+tunnel-group VPN_QNS_TI type remote-access
+tunnel-group VPN_QNS_TI general-attributes
+ default-group-policy VPN_QNS_TI
+tunnel-group VPN_QNS_TI ipsec-attributes
+ ikev1 pre-shared-key fds4*&v(DFGfs25STer23455DHG
+tunnel-group TG_VPN_FULL type remote-access
+tunnel-group TG_VPN_FULL general-attributes
+ default-group-policy GP_VPN_FULL
+tunnel-group TG_VPN_FULL webvpn-attributes
+ group-alias FULL enable
+tunnel-group 186.15.231.246 type ipsec-l2l
+tunnel-group 186.15.231.246 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key quickcit
+ ikev2 local-authentication pre-shared-key quickcit
+tunnel-group 201.197.252.150 type ipsec-l2l
+tunnel-group 201.197.252.150 ipsec-attributes
+ ikev1 pre-shared-key frhgd%TEthDFHdaf342
+tunnel-group 181.193.48.59 type ipsec-l2l
+tunnel-group 181.193.48.59 ipsec-attributes
+ ikev1 pre-shared-key 1nc0p3sc4-QNS
+tunnel-group 164.77.92.204 type ipsec-l2l
+tunnel-group 164.77.92.204 ipsec-attributes
+ ikev1 pre-shared-key TestTemporal123
+ peer-id-validate nocheck
+ ikev2 remote-authentication pre-shared-key TestTemporal123
+ ikev2 local-authentication pre-shared-key TestTemporal123
+tunnel-group TG_VPN_ISE_USERS type remote-access
+tunnel-group TG_VPN_ISE_USERS general-attributes
+ address-pool POOL_VPN_ISE_USERS
+ authentication-server-group ISE-2
+ authorization-server-group ISE-2
+ accounting-server-group ISE-2
+ default-group-policy GP_ISE_VPN_USERS
+tunnel-group TG_VPN_ISE_USERS webvpn-attributes
+ group-alias VPN-ISE-USERS enable
+tunnel-group 201.207.4.30 type ipsec-l2l
+tunnel-group 201.207.4.30 ipsec-attributes
+ ikev1 pre-shared-key bcr2017
+tunnel-group 186.159.130.121 type ipsec-l2l
+tunnel-group 186.159.130.121 ipsec-attributes
+ ikev1 pre-shared-key jnxkjchlKKJKJ677@2%%
+tunnel-group 170.246.100.174 type ipsec-l2l
+tunnel-group 170.246.100.174 ipsec-attributes
+ ikev1 pre-shared-key vPn$456CRuF!n3tQNS
+tunnel-group 186.179.73.102 type ipsec-l2l
+tunnel-group 186.179.73.102 ipsec-attributes
+ ikev1 pre-shared-key C@s@R0l@nd2k18.
+tunnel-group 201.193.185.100 type ipsec-l2l
+tunnel-group 201.193.185.100 ipsec-attributes
+ ikev1 pre-shared-key QN$2K18...!
+!
+class-map CM_SFR
+ match access-list ACL_SFR
+class-map inspection_default
+ match default-inspection-traffic
+class-map flow_export_class
+ match access-list flow_export_acl
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect ftp 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect ip-options 
+  inspect netbios 
+  inspect rsh 
+  inspect rtsp 
+  inspect skinny  
+  inspect esmtp 
+  inspect sqlnet 
+  inspect sunrpc 
+  inspect tftp 
+  inspect sip  
+  inspect xdmcp 
+  inspect dns preset_dns_map 
+  inspect icmp 
+  inspect pptp 
+ class flow_export_class
+policy-map type inspect http PM_HTTP
+ parameters
+policy-map type inspect dns migrated_dns_map_2
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map type inspect dns migrated_dns_map_1
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+!
+service-policy global_policy global
+prompt hostname context 
+captive-portal interface INSIDE
+no call-home reporting anonymous
+call-home
+ profile CiscoTAC-1
+  no active
+  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService
+  destination address email callhome@cisco.com
+  destination transport-method http
+  subscribe-to-alert-group diagnostic
+  subscribe-to-alert-group environment
+  subscribe-to-alert-group inventory periodic monthly 27
+  subscribe-to-alert-group configuration periodic monthly 27
+  subscribe-to-alert-group telemetry periodic daily
+Cryptochecksum:9c83bce11980ea68359221e754da020a
+: end

@@ -1,0 +1,351 @@
+!
+! Last configuration change at 09:47:47 UTC Mon May 10 1993 by quicknet
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname SW_2960_CAMARAS
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$aYCO$caabbPxixbugHEwRoVw951
+!
+username quicknet secret 5 $1$IzfE$OVnF741IqqwOlASTrG1bR0
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication login vty line
+!
+!
+!
+!
+!
+!
+aaa session-id common
+system mtu routing 1500
+vtp mode transparent
+ip dhcp excluded-address 172.29.9.1 172.29.9.10
+!
+ip dhcp pool examenka
+ network 172.29.9.0 255.255.255.0
+ default-router 172.29.9.1 
+ dns-server 8.8.8.8 8.8.4.4 
+ lease 0 4
+ update arp
+!
+!
+ip domain-name qnsoluciones.com
+!
+!
+crypto pki trustpoint TP-self-signed-2682639360
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2682639360
+ revocation-check none
+ rsakeypair TP-self-signed-2682639360
+!
+!
+crypto pki certificate chain TP-self-signed-2682639360
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32363832 36333933 3630301E 170D3933 30333031 30303031 
+  32335A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 36383236 
+  33393336 3030819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100BF8E F72708D4 ED6BCB1C E7C17180 CF138420 438E3221 2857E56D 8FD6C1CB 
+  D60A3DD3 9CEF8A18 F1723E25 D166214F 2FE41A41 9C5960AF E13020FB 6223AA7C 
+  95EE59C6 33D15D93 7CA3D4CB CFA56108 7C23EAB1 A0E8DC8B D4608086 3484A266 
+  ECF1A7E3 B02098F2 985F8B63 3D000AF6 CC3D6904 65D69863 DA099678 E18567AE 
+  0D170203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D2304 18301680 143CFECE B24102D8 42528735 66C3FA49 4BC79100 67301D06 
+  03551D0E 04160414 3CFECEB2 4102D842 52873566 C3FA494B C7910067 300D0609 
+  2A864886 F70D0101 05050003 81810097 1C6A3F22 E8EB2759 495B92B0 D5DEBCFB 
+  E368D141 AAF55874 55D0FA47 8C0D7954 05CAC970 ECD5BAD8 1F0C66D4 2ADDC1B1 
+  D1F783CB F3B5D95C 33F17E4B AC48E4AF 309C37CA F794A5B9 4135FA4B 188601B0 
+  3A4F843E 442790DA 416EBD59 7FB03FFA 9C41E455 D4ADE942 C630A7C2 6AD148B0 
+  42D2B2E7 1DFC3B63 8E52FA12 B1322E
+  	quit
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 32,50 
+!
+vlan 64
+ name QNS_LAN
+!
+vlan 66
+ name Camaras
+!
+vlan 80
+ name QNS_MGT
+!
+vlan 164 
+!
+vlan 169
+ name Q-NOC
+!
+vlan 185-187 
+!
+vlan 887
+ name EXA_DAGO
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/2
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/3
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/4
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/5
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/6
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/7
+ description TO_ACCESS_SYSTEM_ENTER
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/8
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/9
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/10
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/11
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/12
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/13
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/14
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/15
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/16
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/17
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/18
+ description TO_CAMARAS_IP
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/19
+ description TO_PC_VUE
+ switchport access vlan 164
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/20
+ description TO_PC_VUE
+ switchport access vlan 164
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/21
+ description TO_PC_VUE
+ switchport access vlan 164
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+ switchport access vlan 164
+ switchport mode access
+ switchport voice vlan 32
+ spanning-tree portfast
+!
+interface FastEthernet0/24
+ switchport access vlan 32
+ switchport mode access
+ switchport voice vlan 32
+ spanning-tree portfast
+!
+interface FastEthernet0/25
+ description TO_CONTROL_ACC_ENTRADA
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/26
+ description TO_BODEGA_QNS
+ switchport access vlan 164
+ switchport mode access
+ switchport voice vlan 32
+ power inline static
+ spanning-tree portfast
+!
+interface FastEthernet0/27
+!
+interface FastEthernet0/28
+!
+interface FastEthernet0/29
+ description TO_ACCESS_SYSTEM_DC
+ switchport access vlan 66
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/30
+!
+interface FastEthernet0/31
+!
+interface FastEthernet0/32
+!
+interface FastEthernet0/33
+!
+interface FastEthernet0/34
+ description TO_RACK_EVENTO
+ switchport mode trunk
+!
+interface FastEthernet0/35
+!
+interface FastEthernet0/36
+!
+interface FastEthernet0/37
+!
+interface FastEthernet0/38
+!
+interface FastEthernet0/39
+!
+interface FastEthernet0/40
+!
+interface FastEthernet0/41
+!
+interface FastEthernet0/42
+!
+interface FastEthernet0/43
+!
+interface FastEthernet0/44
+!
+interface FastEthernet0/45
+!
+interface FastEthernet0/46
+!
+interface FastEthernet0/47
+!
+interface FastEthernet0/48
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface GigabitEthernet0/3
+ description TO_CORE
+ switchport mode trunk
+!
+interface GigabitEthernet0/4
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan66
+ ip address 172.29.66.250 255.255.255.0
+!
+interface Vlan80
+ ip address 172.29.80.38 255.255.255.0
+!
+interface Vlan887
+ description VLANDAGOEXA
+ ip address 172.29.87.2 255.255.255.0
+!
+ip default-gateway 172.29.66.1
+ip http server
+ip http secure-server
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ transport input ssh
+ transport output telnet ssh
+line vty 5 15
+!
+end
